@@ -24,61 +24,61 @@ Environmental Data → MLP + BatchNorm → [16 dims]   ↓
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                           PROTEIN SEQUENCE INPUT                                │
-│                        "DAEFRHDSGYEVHHQKLVFF..."                              │
+│                        "DAEFRHDSGYEVHHQKLVFF..."                                │
 └─────────────────────────┬───────────────────────────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                         ESM2 TRANSFORMER                                       │
-│                    facebook/esm2_t33_650M_UR50D                               │
-│                     [batch_size, seq_len, 1280]                               │
+│                         ESM2 TRANSFORMER                                        │
+│                    facebook/esm2_t33_650M_UR50D                                 │
+│                     [batch_size, seq_len, 1280]                                 │
 └─────────────────────────┬───────────────────────────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                      ATTENTION POOLING                                         │
-│          Learnable attention weights across sequence positions                 │
-│                    [batch_size, seq_len] → [batch_size, 1280]                 │
+│                      ATTENTION POOLING                                          │
+│          Learnable attention weights across sequence positions                  │
+│                    [batch_size, seq_len] → [batch_size, 1280]                   │
 └─────────────────────────┬───────────────────────────────────────────────────────┘
                           │
                           │         ┌─────────────────────────────────────────────┐
-                          │         │      ENVIRONMENTAL CONDITIONS              │
-                          │         │   Temperature (°C), pH, Concentration      │
-                          │         │            [batch_size, 3]                 │
+                          │         │      ENVIRONMENTAL CONDITIONS               │
+                          │         │   Temperature (°C), pH, Concentration       │
+                          │         │            [batch_size, 3]                  │
                           │         └─────────────┬───────────────────────────────┘
                           │                       │
                           │                       ▼
                           │         ┌─────────────────────────────────────────────┐
-                          │         │       ENVIRONMENTAL MLP                    │
-                          │         │   Linear → BatchNorm → ReLU                │
-                          │         │        [batch_size, 3] → [batch_size, 16]  │
+                          │         │       ENVIRONMENTAL MLP                     │
+                          │         │   Linear → BatchNorm → ReLU                 │
+                          │         │        [batch_size, 3] → [batch_size, 16]   │
                           │         └─────────────┬───────────────────────────────┘
                           │                       │
                           ▼                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                            FUSION MODULE                                        │
 │                      Concatenation Strategy                                     │
-│          [batch_size, 1280] + [batch_size, 16] → [batch_size, 1296]           │
+│          [batch_size, 1280] + [batch_size, 16] → [batch_size, 1296]             │
 └─────────────────────────┬───────────────────────────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                        PREDICTION HEAD                                         │
-│                         4-Block MLP                                            │
+│                        PREDICTION HEAD                                          │
+│                         4-Block MLP                                             │
 │                                                                                 │
-│   Block 1: Linear(1296→256) → ReLU → Dropout(0.3)                            │
-│   Block 2: Linear(256→128)  → ReLU → Dropout(0.3)                            │
-│   Block 3: Linear(128→64)   → ReLU → Dropout(0.3)                            │
-│   Block 4: Linear(64→2)     → Logits                                          │
+│   Block 1: Linear(1296→256) → ReLU → Dropout(0.3)                               │
+│   Block 2: Linear(256→128)  → ReLU → Dropout(0.3)                               │
+│   Block 3: Linear(128→64)   → ReLU → Dropout(0.3)                               │
+│   Block 4: Linear(64→2)     → Logits                                            │
 │                                                                                 │
-│                    [batch_size, 1296] → [batch_size, 2]                       │
+│                    [batch_size, 1296] → [batch_size, 2]                         │
 └─────────────────────────┬───────────────────────────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                          OUTPUT                                                │
-│                    Softmax → Probabilities                                    │
-│              [No Aggregation, Aggregation] + Confidence                       │
+│                          OUTPUT                                                 │
+│                    Softmax → Probabilities                                      │
+│              [No Aggregation, Aggregation] + Confidence                         │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
