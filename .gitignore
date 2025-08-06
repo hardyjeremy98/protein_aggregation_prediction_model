@@ -1,4 +1,54 @@
+# Jupyter Notebooks
 *.ipynb
+.ipynb_checkpoints/
+
+# Python
 *.pyc
+*.pyo
+*.pyd
 __pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual Environments
 .env/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Model files and data
+*.pth
+*.pkl
+*.h5
+*.weights
+data/
+datasets/
+checkpoints/
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
